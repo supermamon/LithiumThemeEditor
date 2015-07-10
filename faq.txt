@@ -1,0 +1,51 @@
+Lithium Theme Editor FAQ
+========================
+
+
+1. How do I import my theme to my device.
+
+Copy the code from the textbox and save it into a .js file.
+In your device, copy the file into /Library/Lithium/ folder.
+
+2. Why are some themes prefixed with LN?
+
+These are themes that are/will be included in the Lithium Nitro theme pack.
+You can add the repo https://supermamon.github.io/repo in cydia to install it.
+
+3. Can I use the code of this page on my own website?
+
+Yes. You can clone the code from github. 
+
+4. I saw the change log and I'm interested on the changes for v0.6.1 & 0.6.2.
+   What are they for?
+
+   **** v0.6.2 update temporarily disabled. ****
+   
+v0.6.1. I've remove the code for the samples from the main ThemeMaker.html. They 
+        are now save as XML files. With that, I can load the scripts just by 
+		having the XML filenames. XML format is as below:
+		
+		<theme>
+		<name>Empty</name>
+		<script>
+		<![CDATA[
+		(height, percentage, charging, low, color) 
+		{
+		
+		/* code here */
+		
+		}
+		]]>
+		</script>
+		</theme>		
+		
+		
+		The 'p' parameter is to be able to 'pick' the default theme to load.
+		So if the URL is called like this: 
+		
+		    https://.../Lithium/ThemeMaker.html?p=LBI
+			
+		It will select LBI by default. This is good to use when sharing scripts.
+		
+v0.6.2  Now you can pass the URL for your XML file with the 'x' parameter.
+		https://.../Lithium/ThemeMaker.html?x=http://.../LBI.xml

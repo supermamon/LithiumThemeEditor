@@ -1,0 +1,34 @@
+Lithium Theme Editor
+====================
+
+Roadmap
+v0.5.0 - Use Wallpaper for transparent status bar - DONE
+v0.6.0 - Customizeable Sample - DONE
+v0.7.0 - Show Standard Status bar icons -- signal, wifi, time, etc
+       - Actual device preview
+v0.8.0 - Better UI. Web Design
+v0.9.0 - None Planned, may release v1.0
+v1.0.0 - Release
+v2.0.0 - Theme Builder, point and click, download
+
+
+ChangeLog
+v0.6.5 : aarzee added 24px height and compile button.
+         Separated from supermamon.github.io site.
+v0.6.4 : Support loading scripts as .js files instead of xml. 
+         Temporarily remove 'x' parameter support for xss-security.
+v0.6.3 : Syntax checking. Show a small red 'E' on the preview.
+v0.6.2 : Load own xml file by passing the url via 'x' querystring
+v0.6.1 : Load sample themes from XML for cleaner code. Allow passing of default theme with 'p' querystring.
+v0.6.0 : Added sample theme BuildingBlocksTemplate. Renamed some samples.
+v0.5.2 : Added sample theme LN-Speedometer.
+v0.5.1 : Bugfix: Background color now applies back after choosing from Transparent.
+v0.5.0 : Use Wallpaper for transparent status bar.
+v0.4.1 : Minor changes to SimpleBar sample.
+v0.4.0 : Added Sample Code picker.
+v0.3.2 : Bugfix: Custom tint can now be used by ticking Use Custom.
+v0.3.1 : Modifed sample script. Added Viber background.
+v0.3.0 : Added status bar background+dynamic tint
+v0.2.1 : Add sample code for putting text
+v0.2.0 : Simpler sample with comments
+v0.1.0 : First Release

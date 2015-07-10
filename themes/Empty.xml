@@ -1,0 +1,28 @@
+<theme>
+<name>Empty</name>
+<script>
+<![CDATA[
+(height, percentage, charging, low, color) 
+{
+var 
+    canvas     = document.createElement("canvas"),
+    context    = canvas.getContext("2d"),
+    tintOpaque = "rgba(" + color.join() + ",1)",
+    tintTransP = "rgba(" + color.join() + ",0)",
+    tintTransL = "rgba(" + color.join() + ",0.5)";
+
+var 
+    canvasHeight  = Math.round(height * 1),
+    canvasWidth   = Math.round(height * 1);
+
+canvas.width  = canvasWidth;
+canvas.height = canvasHeight;
+	
+/* send the image */
+return canvas.toDataURL("image/png");
+}
+]]>
+</script>
+	
+
+</theme>

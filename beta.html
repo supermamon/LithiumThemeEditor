@@ -1,0 +1,389 @@
+<html>
+<head>
+	<title>Lithium Theme Editor by @supermamon</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="js/jquery.querystring.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/lithium.css">
+	<script type="text/javascript">
+	
+	var themesFolder = "themes/"
+	var themes = [];
+	/*
+	themes[themes.length] = 'Habesha.xml';	
+	themes[themes.length] = 'LBI.xml';	
+	themes[themes.length] = 'Droid.xml';
+	themes[themes.length] = 'Hearts.xml';	
+	themes[themes.length] = 'LN-Simple.xml';
+	themes[themes.length] = 'LN-Dots.xml';
+	themes[themes.length] = 'LN-Batthead.xml';
+	themes[themes.length] = 'LN-Speedometer.xml';
+	themes[themes.length] = 'LN-BuildingBlocksTemplate.xml';
+	themes[themes.length] = 'LN-Customizeable.xml';
+	themes[themes.length] = 'Empty.xml';
+	*/
+	themes[themes.length] = 'Habesha.js';	
+	themes[themes.length] = 'LBI.js';	
+	themes[themes.length] = 'Droid.js';
+	themes[themes.length] = 'Hearts.js';	
+	themes[themes.length] = 'LN-Simple.js';
+	themes[themes.length] = 'LN-Dots.js';
+	themes[themes.length] = 'LN-Batthead.js';
+	themes[themes.length] = 'LN-Speedometer.js';
+	themes[themes.length] = 'LN-BlocksTemplate.js';
+	themes[themes.length] = 'LN-Customizeable.xml';
+	themes[themes.length] = 'Empty.js';
+
+	if ($.QueryString['x']) {
+		//var themes = [];
+		//themes[themes.length] = $.QueryString['x'];
+	}
+	
+	
+
+	var tints = [];
+	tints['White']		= {name:'White'      ,backgroundColor:'#FFFFFF',tint:'0,0,0'};
+	tints['Black']		= {name:'Black'      ,backgroundColor:'#000000',tint:'255,255,255'};
+	tints['Gray']		= {name:'Gray'       ,backgroundColor:'#888888',tint:'0,0,0'};
+	tints['Facebook']	= {name:'Facebook'   ,backgroundColor:'#3b5998',tint:'255,255,255'};
+	tints['Twitter']	= {name:'Twitter'    ,backgroundColor:'#00aced',tint:'255,255,255'};
+	tints['Evernote']	= {name:'Evernote'   ,backgroundColor:'#6FB536',tint:'0,0,0'};
+	tints['Instagram']	= {name:'Instagram'  ,backgroundColor:'#517fa4',tint:'255,255,255'};
+	tints['LinkedIn']	= {name:'LinkedIn'   ,backgroundColor:'#007bb6',tint:'255,255,255'};
+	tints['Viber']		= {name:'Viber'      ,backgroundColor:'#783cbd',tint:'255,255,255'};
+	tints['Transparent']= {name:'Transparent',backgroundColor:'#000000',tint:'255,255,255'};
+	
+	var LOADING_THEMES  = false;
+	
+    $( document ).ready(function() {
+        LOADING_THEMES = true;
+		for(var i=0;i<themes.length;i++) {
+			var xmlFile = themes[i];
+			
+			if ( (/js$/i).test(xmlFile) ) {
+			
+				$('#sampleChooser')
+					.append(
+						$("<option></option>")
+						.attr("selected",($.QueryString['p']==xmlFile?true:false ))
+						.attr("value",(themesFolder+xmlFile))
+						.text(xmlFile)
+					);
+			} else {
+			
+				$.ajax({
+					  type: "GET",
+					  async: false,
+					  url: (themesFolder+xmlFile),
+					  dataType: "xml",
+					  success: function(xmlData) {
+							var themeName = xmlData.getElementsByTagName('theme')[0].getElementsByTagName('name')[0].innerHTML.trim()
+							$('#sampleChooser')
+								.append(
+									$("<option></option>")
+									.attr("selected",($.QueryString['p']==themeName?true:false ))
+									.attr("value",(themesFolder+xmlFile))
+									.text(themeName)
+								);
+					  } //success
+				}); //ajax
+			}
+		} //for
+		
+		
+		
+		for (itint in tints) {
+			$('#cboBackground')
+				.append(
+					$("<option></option>")
+					.attr("value",tints[itint].name)
+					.text(tints[itint].name)
+				);
+		
+		}
+		LOADING_THEMES = false;
+		themeSelect();
+		
+    }); //document ready	
+	
+	function themeSelect(){
+	
+		if (LOADING_THEMES) {return};
+		var xmlFile = $('#sampleChooser option:selected').val();
+		
+		if ((/js$/i).test(xmlFile)) {
+		
+			$.ajax({
+				  type: "GET",
+				  async: false,
+				  url: xmlFile,
+				  dataType: "text",
+				  success: function(textData) {
+						$('#code').val(textData);
+				  }
+			}); //ajax
+		
+		} else {
+			$.ajax({
+				  type: "GET",
+				  async: false,
+				  url: xmlFile,
+				  dataType: "xml",
+				  success: function(xmlData) {
+						var themeScript = $(xmlData).find('theme:first').find('script:first').text().trim();
+						$('#code').val(themeScript);
+				  }
+			}); //ajax
+		
+		}
+		
+		
+		settingsChange();
+		
+	}
+
+	function settingsChange() {
+		var code             = $('#code').val();
+		var statusBackground = $('#cboBackground option:selected').val();
+		var statusBackgroundColor = tints[statusBackground].backgroundColor;
+
+		var backgroundImage;
+		if (tints[statusBackground].name == 'Transparent')  {
+			backgroundImage = "url('" + $('#txtWallpaper').val() + "')";
+		} else {
+			backgroundImage = null;
+		}
+		
+		var isCustomTint = $('#isCustomTint').is(':checked');
+		if (!isCustomTint) {
+			$('#txtColor').val(tints[statusBackground].tint);
+		}
+		
+		var colors = $('#txtColor').val();
+		var colors = colors.split(',');
+
+		var height = $('#cboHeight option:selected').val();
+		var isCharging = $('#isCharging').is(':checked');
+		var isLow = $('#isLow').is(':checked');
+		
+		var percs=[5,10,20,50,75,100];
+		
+		var samples = document.getElementById('samples');
+		
+		for(var i=0;i<percs.length;i++) {
+			
+			// create the status bar
+			var div = document.getElementById('div'+percs[i]);
+			//var div = $('#div'+percs[i]);
+			
+			// create the battery image
+			var img = document.getElementById('img'+percs[i]);
+
+			if (!div) { // if not existing
+				
+				// create
+				div = document.createElement("div");
+				$(div)
+					.attr('id','div'+percs[i])
+					.attr('class','statusBar')
+
+				if (i>0) {
+					$('#samples').append($('<br>'))
+				}
+				
+				$('#samples').append(div)
+				
+			}
+			// set status bar styles
+			div.style.height = height+'px';
+			
+			if (backgroundImage) {
+				div.style.backgroundImage  = backgroundImage;
+			} else {
+				div.style.backgroundColor = statusBackgroundColor;
+				div.style.backgroundImage = null;
+			}
+			
+			if (!img) { //if not exists
+			
+				//$(div).append($("<span>B</span>"))
+				$(div).append(
+					$("<span id='errorIcon" + percs[i] + "'>E</span>")
+						.css({
+							"color":"#FFF",
+							"background-color":"#F00",
+							"font-family":"'Helvetica', 'Arial','Tahoma'",
+							"font-size":"7pt",
+							"width":"8pt",
+							"height":"8pt",
+							"display":"block",
+							"text-align":"center",
+							"float":"left"
+						})
+				)
+			
+				img=document.createElement("img");
+				img.setAttribute('id','img'+percs[i]);
+				img.setAttribute('align','right');
+				img.setAttribute('class','battery');
+				div.appendChild(img);
+				div.appendChild(document.createTextNode(' '));
+				
+			}
+			// set icon
+			try {
+				var matches = code.match(/^(?:\s*\()(\s*\w+\s*(,\s*\w+\s*){4})/)[0].replace(/[\s\(\)]/g, '').split(',');
+				var renderBattery    = new Function(matches[0], matches[1], matches[2], matches[3], matches[4], code);
+				img.setAttribute('src', renderBattery(height, percs[i], isCharging, isLow, colors) );
+				$('#errorIcon' + percs[i]).hide();
+			} catch(err) {
+				$('#errorIcon' + percs[i]).show();
+			}
+		}
+	} //settingsChanged
+	function compile() {
+		$.ajax({
+			type: 'POST',
+			url: 'https://closure-compiler.appspot.com/compile',
+			data: {
+	  			js_code: 'function r' + $('#code').val(),
+	  			compilation_level: 'SIMPLE_OPTIMIZATIONS',
+	  			output_info: 'compiled_code',
+	  			output_format: 'text'
+	  		},
+			success: function(data) {
+				$('#code').val(data.substring(10, data.length - 2).replace(/(\r\n|\n|\r)/gm, ''));
+			}
+		});
+	}
+
+	</script>
+</head>
+<body>
+<h2>Lithium Theme Editor</h2> by <a href="https://twitter.com/supermamon/">@supermamon</a>
+<br>
+<table width="100%" border="0">
+	<tr>
+		<td>
+			<b>Sample Code:</b> <select id="sampleChooser" onchange="themeSelect()"></select>
+		</td>
+		<td>
+			<b>Preview:</b>
+		</td>
+	</tr>
+	<tr>
+		<td><hr></td>
+		<td><hr></td>
+	</tr>
+	<tr>
+		<td valign="top" width="30%">
+			<div id="divCode">function renderBattery</div>
+			<textarea id="code" rows="40" cols="100" onkeyup="settingsChange()"></textarea>
+		</td>
+		<td valign="top" align="left" width="50%">
+			<table border="0" align="center">
+				<tr>
+					<td valign="middle">Status Background</td>
+					<td>
+						<select id="cboBackground" onchange="settingsChange();" />
+					</td>
+				</tr>
+				<tr>
+					<td valign="middle">Status Height</td>
+					<td><select id="cboHeight" onchange="settingsChange()">
+						<option value="20">20
+						<option value="24">24
+						<option value="40" selected>40
+						<option value="48">48
+						<option value="60">60
+						<option value="72">72
+					</select>
+					<br>
+					<sup>This is the height of the status bar</sup>
+					</td>
+				</tr>
+				<tr>
+					<td>Battery Charging</td>
+					<td>
+						<input id="isCharging" type="checkBox" onclick="settingsChange()">
+						<br>
+						<sup>Tick this to see how it looks like when charging</sup>
+					</td>					
+				</tr>
+				<tr>
+					<td>Battery Low</td>
+					<td>
+						<input id="isLow" type="checkBox" onclick="settingsChange()">
+						
+						<br>
+						<sup>Tick this to see how it looks like when battery is low</sup>
+					<td>						
+				</tr>
+				<tr>
+					<td>System Tint</td>
+					<td><input id="txtColor" type="text" value="0,0,0" onchange="settingsChange()">
+					<input id="isCustomTint" type="checkBox" onclick="settingsChange()">Use Custom
+					<br>
+					<sup>Separate the values comma. This is the system tint. Some tweaks like Eclipse can change this.</sup>
+				</tr>
+				<tr>
+					<td>Wallpaper</td>
+					<td><input id="txtWallpaper" type="text" size="50" onchange="settingsChange()" value="images/os_x_mountain_lion.png">
+					<br>
+					<sup>Only applies when Transparent background is selected. You can specify the full URL here.
+					<br>
+					Doesn't detect light or dark wallpapers. Assumes dark. Set Custom System tint (0,0,0) to simulate light wallpaper.
+					</sup>
+				</tr>
+				<tr>
+					<td>Closure Compiler</td>
+					<td><input id="closureCompiler" type="button" onclick="compile()" value="Compile">
+					<br>
+					<sup>Run code through Google's Closure Compiler. Do this before packaging your theme. <span style="font-weight:bold">This will overwrite any code you have entered.</span>
+					<br>
+					<span id="compilerError"></span>
+					</sup>
+				<tr>
+					<td valign="top" colspan="2">How it looks like?</td>
+				</tr>
+				<tr>
+					<td id="samples" colspan="2"></td>
+				</tr>
+			</table>
+			<hr>
+			<table border="0" width="90%" align="center">
+			<tr>
+				<td valign="top" width="50%">
+					<p><b>Need help?</b>
+					<div id="help">
+						<ul>
+							<li><a href="http://aarzee.me/lithium/tutorial.html">Lithium Tutorial</a></li>
+							<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial">Canvas Tutorial by MDN</a></li>
+							<li><a href="http://diveintohtml5.info/canvas.html">Canvas - Dive Into HML5</a></li>
+							<li><a href="http://www.html5canvastutorials.com/tutorials/html5-canvas-element/">HTML Canvas Tutorials</a></li>
+							<li><a href="http://www.w3schools.com/canvas/default.asp">HTML Canvas by W3Schools</a></li>
+						</ul>
+						</p>
+					</div>
+				</td>
+				<td valign="top" width="50%">
+					<b>Links</b>
+					<div id="help">
+						<ul>
+							<li><a href="changelog.txt">Changelog v0.6.4</a></li>
+							<li><a href="faq.txt">FAQ</a></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<!-- Start of SimpleHitCounter Code -->
+<div align="center">
+<a href="http://www.simplehitcounter.com" target="_blank"><!--img src="http://simplehitcounter.com/hit.php?uid=1874119&f=0&b=16777215" border="0" height="18" width="83" alt="web counter"--></a>
+<!--br><a href="http://www.simplehitcounter.com" target="_blank" style="text-decoration:none;">web counter</a-->
+</div>
+<!-- End of SimpleHitCounter Code -->
+</body>
+</html>
