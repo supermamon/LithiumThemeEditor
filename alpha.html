@@ -1,60 +1,186 @@
+<!DOCTYPE html>
 <html>
 <head>
-	<title>Lithium Theme Editor by @supermamon</title>
+	<title>Lithium Theme Editor</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style>
+#divCode {
+	/*function header*/
+	font-family : 'Consolas','Courier New','Courier','monospace';
+	font-size: 9pt;
+	border: 1px solid Silver;
+	border-bottom: 0px;
+	background-color: #ddd;
+	width = '100%';
+}
+#code {
+	/*text area*/
+	font-family : 'Consolas','Courier New','Courier','monospace';
+	font-size: 9pt;
+	border: 1px solid Silver;
+	border-top: 0px;
+	height: '100%'
+}
+</style>
+
+	<script>
+
+	var settings = [];
+	settings['height']=20;
+	settings['background']='White';
+
+	function applySetting(pref,val){
+		settings[pref]=val;
+	}
+	function event_settings_changed(){
+		alert('changed');
+
+	}
+
+
+
+	</script>
+
 </head>
 <body>
 
 <div class="container-fliud">
+
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 text-center">
 			<h3>Lithium Theme Editor <small>by @supermamon</small></h3>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12 form-inline">
-		  <div class="form-group">
-			<label for="cboTheme">Select Sample</label>
-			<select class="form-control" id="cboTheme">
-				<option>one</option>
-				<option>two</option>
-			</select>
-		  </div>		
-		</div>
-	</div>
-</div>
+		<div class="col-md-5 text-right">
+			<!-- Device Button -->
+			<div class="btn-group">
+				<button type="button" class="btn btn-sm btn-default" id="cboDevice">Device</button>
+				<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<span class="caret"></span>
+					<span class="sr-only">Toggle Dropdown</span>
+				</button>
+				<ul class="dropdown-menu" aria-labelledby="cboDevice">
+					<li class="dropdown-header">Device</li>
+					<li><a href="#">iPhone 6+</a></li>
+					<li><a href="#">iPhone 6</a></li>
+				</ul>
+			</div>
+			<!-- Theme Button -->
+			<div class="btn-group">
+				<button type="button" class="btn btn-sm btn-default" id="cboTheme">Theme</button>
+				<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<span class="caret"></span>
+					<span class="sr-only">Toggle Dropdown</span>
+				</button>
+				<ul class="dropdown-menu" aria-labelledby="cboTheme">
+					<li class="dropdown-header">Theme</li>
+					<li><a href="#">Habesha.js</a></li>
+					<li><a href="#">Dot.js</a></li>
+				</ul>
+			</div>
+			<!-- Background Button -->
+			<div class="btn-group">
+			  <button type="button" class="btn btn-sm btn-default" id="cboBackground">Background</button>
+			  <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    <span class="caret"></span>
+			    <span class="sr-only">Toggle Dropdown</span>
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="cboBackground">
+					<li class="dropdown-header">Background</li>
+			    <li><a href="#">White</a></li>
+			    <li><a href="#">Black</a></li>
+			    <li><a href="#">Silver</a></li>
+			  </ul>
+			</div>
+			<!-- Height Button -->
+			<div class="btn-group">
+			  <button type="button" class="btn btn-sm btn-default" id="cboHeight">Height</button>
+			  <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    <span class="caret"></span>
+			    <span class="sr-only">Toggle Dropdown</span>
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="cboHeight">
+					<li class="dropdown-header">Height</li>
+			    <li><a href="#">20</a></li>
+			    <li><a href="#">24</a></li>
+			    <li><a href="#">40</a></li>
+			  </ul>
+			</div>
+
+			<div class="btn-group" data-toggle="buttons">
+					<!-- Charging Button -->
+			    <label class="btn btn-sm btn-default glyphicon glyphicon-flash" title="Charging">
+			    	<input type="checkbox">
+			  	</label>
+					<!-- Battery Low Button -->
+					<label class="btn btn-sm btn-default glyphicon glyphicon-exclamation-sign" title="Battery Low">
+			    	<input type="checkbox">
+			  	</label>
+			</div>
+
+
+		</div> <!-- COL 1 -->
+		<div class="col-md-2">
+			<div class="input-group">
+				<span class="input-group-addon" id="CustomTintLabel">Custom Tint</span>
+	      <span class="input-group-addon">
+	        <input type="checkbox" aria-describedby="CustomTintLabel">
+	      </span>
+	      <input type="text" class="form-control" placeholder="0,0,0" aria-label="...">
+	    </div><!-- /input-group -->
+		</div> <!-- COL 2 -->
+		<div class="col-md-4">
+			<div class="input-group">
+			  <span class="input-group-addon" id="basic-addon1">Wallpaper</span>
+			  <input type="text" class="form-control" placeholder="images/os_x_mountain_lion.png" aria-describedby="basic-addon1">
+			</div>
+		</div> <!-- COL 3 -->
+		<div class="col-md-1">
+		</div><!-- COL 4 -->
+	</div> <!-- ROW -->
+
 <hr />
 <div class="container-fliud">
 	<div class="row">
-		<div class="col-md-6">
-		left
-		</div>
+		<div class="col-md-6" style="margin-left:1px;">
+			<div class="col-md-12" id="divCode">function renderBattery</div>
+			<textarea class="col-md-12 form-control" id="code" rows="33" cols="80"></textarea>
+			</div>
 		<div class="col-md-5">
-			<form role="form" class="form-horizontal">
-				<div class="form-group"> 
-					<label for="cboBackground" class="col-md-1">Background</label>
-					<div class="col-md-4">
-						<select class="form-control" id="cboBackground">
-							<option>White</option>
-						</select>
-					</div>
-					<label for="cboHeight" class="col-md-1">Height</label>
-					<div class="col-md-4">
-						<select class="form-control" id="cboHeight">
-							<option>20</option>
-						</select>
-					</div>
+			<div style="background:url(images/iPhone6.png);height:300px;width:702px;">
+				<div style="border:1px solid green; position:absolute; top:174px; left:65px; width:603px; height:24px;">
+
 				</div>
-			</form>
-			
+
+			</div>
 		</div>
-		<div class="col-md-1"></div>
+
 	</div>
 </div>
+<script>
+$(function(){
 
+    $(".dropdown-menu").on('click', 'li a', function(){
+			var button = $(this).parent().parent().attr('aria-labelledby');
+			$('#'+button).text($(this).text());
+			$('#'+button).val($(this).text());
+   });
+
+});
+</script>
 
 
 </body>

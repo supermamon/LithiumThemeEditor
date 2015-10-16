@@ -4,15 +4,15 @@ Lithium Theme Editor
 Roadmap
 v0.5.0 - Use Wallpaper for transparent status bar - DONE
 v0.6.0 - Customizeable Sample - DONE
-v0.7.0 - Show Standard Status bar icons -- signal, wifi, time, etc
-       - Actual device preview
-v0.8.0 - Better UI. Web Design
+v0.7.0 - None Planned, may release v1.0
+v0.8.0 - None Planned, may release v1.0
 v0.9.0 - None Planned, may release v1.0
 v1.0.0 - Release
-v2.0.0 - Theme Builder, point and click, download
+v2.0.0 - Theme Builder, point and click, download, better design.
 
 
 ChangeLog
+v0.6.6 : Support for Lithium 2. Minor bugfixes.
 v0.6.5 : aarzee added 24px height and compile button.
          Separated from supermamon.github.io site.
 v0.6.4 : Support loading scripts as .js files instead of xml. 
