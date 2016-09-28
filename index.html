@@ -1,421 +1,472 @@
 <html>
 <head>
-	<title>Lithium Theme Editor by @supermamon</title>
-	<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"> 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script src="js/jquery.querystring.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/lithium.css">
-	<script type="text/javascript">
+  <title>Lithium Theme Editor by @supermamon</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.12/dist/clipboard.min.js"></script>
+  <script src="js/jquery.querystring.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/lithium.css">
+  <script type="text/javascript">
 
-	var themesFolder = "themes/"
-	var themes = [];
-	/*
-	themes[themes.length] = 'Habesha.xml';
-	themes[themes.length] = 'LBI.xml';
-	themes[themes.length] = 'Droid.xml';
-	themes[themes.length] = 'Hearts.xml';
-	themes[themes.length] = 'LN-Simple.xml';
-	themes[themes.length] = 'LN-Dots.xml';
-	themes[themes.length] = 'LN-Batthead.xml';
-	themes[themes.length] = 'LN-Speedometer.xml';
-	themes[themes.length] = 'LN-BuildingBlocksTemplate.xml';
+  var themesFolder = "themes/"
+  var themes = [];
+  /*
+  themes[themes.length] = 'Habesha.xml';
+  themes[themes.length] = 'LBI.xml';
+  themes[themes.length] = 'Droid.xml';
+  themes[themes.length] = 'Hearts.xml';
+  themes[themes.length] = 'LN-Simple.xml';
+  themes[themes.length] = 'LN-Dots.xml';
+  themes[themes.length] = 'LN-Batthead.xml';
+  themes[themes.length] = 'LN-Speedometer.xml';
+  themes[themes.length] = 'LN-BuildingBlocksTemplate.xml';
 
-	themes[themes.length] = 'Empty.xml';
-	*/
-	themes[themes.length] = 'Habesha.js';
-	themes[themes.length] = 'LBI.js';
-	themes[themes.length] = 'Droid.js';
-	themes[themes.length] = 'Hearts.js';
-	themes[themes.length] = 'LN-Simple.js';
-	themes[themes.length] = 'LN-Dots.js';
-	themes[themes.length] = 'LN-Batthead.js';
-	themes[themes.length] = 'LN-Speedometer.js';
-	themes[themes.length] = 'LN-BlocksTemplate.js';
-	//themes[themes.length] = 'LN-Customizeable.xml';
-	themes[themes.length] = 'Empty.js';
+  themes[themes.length] = 'Empty.xml';
+  */
+  themes[themes.length] = 'Habesha.js';
+  themes[themes.length] = 'LBI.js';
+  themes[themes.length] = 'Droid.js';
+  themes[themes.length] = 'Hearts.js';
+  themes[themes.length] = 'LN-Simple.js';
+  themes[themes.length] = 'LN-Dots.js';
+  themes[themes.length] = 'LN-Batthead.js';
+  themes[themes.length] = 'LN-Speedometer.js';
+  themes[themes.length] = 'LN-BlocksTemplate.js';
+  //themes[themes.length] = 'LN-Customizeable.xml';
+  themes[themes.length] = 'Empty.js';
 
-	if ($.QueryString['x']) {
-		//var themes = [];
-		//themes[themes.length] = $.QueryString['x'];
-	}
+  if ($.QueryString['x']) {
+    //var themes = [];
+    //themes[themes.length] = $.QueryString['x'];
+  }
 
 
 
-	var tints = [];
-	tints['White']		= {name:'White'      ,backgroundColor:'#FFFFFF',tint:'0,0,0'};
-	tints['Black']		= {name:'Black'      ,backgroundColor:'#000000',tint:'255,255,255'};
-	tints['Gray']		= {name:'Gray'       ,backgroundColor:'#888888',tint:'0,0,0'};
-	tints['Facebook']	= {name:'Facebook'   ,backgroundColor:'#3b5998',tint:'255,255,255'};
-	tints['Twitter']	= {name:'Twitter'    ,backgroundColor:'#00aced',tint:'255,255,255'};
-	tints['Evernote']	= {name:'Evernote'   ,backgroundColor:'#6FB536',tint:'0,0,0'};
-	tints['Instagram']	= {name:'Instagram'  ,backgroundColor:'#517fa4',tint:'255,255,255'};
-	tints['LinkedIn']	= {name:'LinkedIn'   ,backgroundColor:'#007bb6',tint:'255,255,255'};
-	tints['Viber']		= {name:'Viber'      ,backgroundColor:'#783cbd',tint:'255,255,255'};
-	tints['Transparent']= {name:'Transparent',backgroundColor:'#000000',tint:'255,255,255'};
+  var tints = [];
+  tints['White']        = {name:'White'      ,backgroundColor:'#FFFFFF',tint:'0,0,0'};
+  tints['Black']        = {name:'Black'      ,backgroundColor:'#000000',tint:'255,255,255'};
+  tints['Gray']         = {name:'Gray'       ,backgroundColor:'#888888',tint:'0,0,0'};
+  tints['Facebook']     = {name:'Facebook'   ,backgroundColor:'#3b5998',tint:'255,255,255'};
+  //tints['Twitter']      = {name:'Twitter'    ,backgroundColor:'#FFFFFF',tint:'0,0,0'};
+  //tints['Evernote']     = {name:'Evernote'   ,backgroundColor:'#6FB536',tint:'0,0,0'};
+  //tints['Instagram']    = {name:'Instagram'  ,backgroundColor:'#517fa4',tint:'255,255,255'};
+  tints['LinkedIn']     = {name:'LinkedIn'   ,backgroundColor:'#007bb6',tint:'255,255,255'};
+  tints['Viber']        = {name:'Viber'      ,backgroundColor:'#783cbd',tint:'255,255,255'};
+  tints['Transparent']  = {name:'Transparent',backgroundColor:'#000000',tint:'255,255,255'};
 
-	var LOADING_THEMES  = false;
+  var LOADING_THEMES  = false;
 
     $( document ).ready(function() {
         LOADING_THEMES = true;
-		for(var i=0;i<themes.length;i++) {
-			var xmlFile = themes[i];
+    for(var i=0;i<themes.length;i++) {
+      var xmlFile = themes[i];
 
-			if ( (/js$/i).test(xmlFile) ) {
+      if ( (/js$/i).test(xmlFile) ) {
 
-				$('#sampleChooser')
-					.append(
-						$("<option></option>")
-						.attr("selected",($.QueryString['p']==xmlFile?true:false ))
-						.attr("value",(themesFolder+xmlFile))
-						.text(xmlFile)
-					);
-			} else {
+        $('#sampleChooser')
+          .append(
+            $("<option></option>")
+            .attr("selected",($.QueryString['p']==xmlFile?true:false ))
+            .attr("value",(themesFolder+xmlFile))
+            .text(xmlFile)
+          );
+      } else {
 
-				$.ajax({
-					  type: "GET",
-					  async: false,
-					  url: (themesFolder+xmlFile),
-					  dataType: "xml",
-					  success: function(xmlData) {
-							var themeName = xmlData.getElementsByTagName('theme')[0].getElementsByTagName('name')[0].innerHTML.trim()
-							$('#sampleChooser')
-								.append(
-									$("<option></option>")
-									.attr("selected",($.QueryString['p']==themeName?true:false ))
-									.attr("value",(themesFolder+xmlFile))
-									.text(themeName)
-								);
-					  } //success
-				}); //ajax
-			}
-		} //for
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: (themesFolder+xmlFile),
+            dataType: "xml",
+            success: function(xmlData) {
+              var themeName = xmlData.getElementsByTagName('theme')[0].getElementsByTagName('name')[0].innerHTML.trim()
+              $('#sampleChooser')
+                .append(
+                  $("<option></option>")
+                  .attr("selected",($.QueryString['p']==themeName?true:false ))
+                  .attr("value",(themesFolder+xmlFile))
+                  .text(themeName)
+                );
+            } //success
+        }); //ajax
+      }
+    } //for
 
 
 
-		for (itint in tints) {
-			$('#cboBackground')
-				.append(
-					$("<option></option>")
-					.attr("value",tints[itint].name)
-					.text(tints[itint].name)
-				);
+    for (itint in tints) {
+      $('#cboBackground')
+        .append(
+          $("<option></option>")
+          .attr("value",tints[itint].name)
+          .text(tints[itint].name)
+        );
 
-		}
-		LOADING_THEMES = false;
-		themeSelect();
+    }
+    LOADING_THEMES = false;
+    themeSelect();
 
     }); //document ready
 
-	function themeSelect(){
+  function themeSelect(){
 
-		if (LOADING_THEMES) {return};
-		var xmlFile = $('#sampleChooser option:selected').val();
+    if (LOADING_THEMES) {return};
+    var xmlFile = $('#sampleChooser option:selected').val();
 
-		if ((/js$/i).test(xmlFile)) {
+    if ((/js$/i).test(xmlFile)) {
 
-			$.ajax({
-				  type: "GET",
-				  async: false,
-				  url: xmlFile,
-				  dataType: "text",
-				  success: function(textData) {
-						$('#code').val(textData);
-				  }
-			}); //ajax
+      $.ajax({
+          type: "GET",
+          async: false,
+          url: xmlFile,
+          dataType: "text",
+          success: function(textData) {
+            $('#code').val(textData);
+          }
+      }); //ajax
 
-		} else {
-			$.ajax({
-				  type: "GET",
-				  async: false,
-				  url: xmlFile,
-				  dataType: "xml",
-				  success: function(xmlData) {
-						var themeScript = $(xmlData).find('theme:first').find('script:first').text().trim();
-						$('#code').val(themeScript);
-				  }
-			}); //ajax
+    } else {
+      $.ajax({
+          type: "GET",
+          async: false,
+          url: xmlFile,
+          dataType: "xml",
+          success: function(xmlData) {
+            var themeScript = $(xmlData).find('theme:first').find('script:first').text().trim();
+            $('#code').val(themeScript);
+          }
+      }); //ajax
 
-		}
+    }
 
 
-		settingsChange();
+    settingsChange();
 
-	}
+  }
 
-	function versionChanged() {
-		var code  = $('#code').val();
-		v1RegEx = /^\(\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*\)\s*$/m;
-		v2RegEx = /^\(\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)+s*\)\s*$/m;
-		
-		var optVersion = $("input:radio[name=optVersion]:checked").val();
-		if (optVersion==2) {
-			// selected version 2. only replace if v1
-			if (v1RegEx.test(code)) {
-				//console.log("matched with v1");
-				
-				code = code.replace(v1RegEx,'($1, $2, $3, $4, lpm, $5)');
-			} else {
-				//console.log("no match with v1");
-			}						
-			
-		} else {
-			// selected version 1. only replace if v2 
-			if (v2RegEx.test(code)) {
-				code = code.replace(v2RegEx,'($1, $2, $3, $4, $6)');
-			} else {
-				//console.log("no match with v2");
-			}
-		}
-		//console.log(code);
-		$('#code').val(code);
-		
-		
-	}
+  function versionChanged() {
+    var code  = $('#code').val();
+    v1RegEx = /^\(\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*\)\s*$/m;
+    v2RegEx = /^\(\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)\s*,\s*([a-zA-Z_\$]+[a-zA-Z_\$\d]*)+s*\)\s*$/m;
 
-	function settingsChange() {
-		var code  = $('#code').val();
-		var statusBackground = $('#cboBackground option:selected').val();
-		var statusBackgroundColor = tints[statusBackground].backgroundColor;
+    var optVersion = $("input:radio[name=optVersion]:checked").val();
+    if (optVersion==2) {
+      $("#trLPM").show();
+      // selected version 2. only replace if v1
+      if (v1RegEx.test(code)) {
+        //console.log("matched with v1");
 
-		var backgroundImage;
-		if (tints[statusBackground].name == 'Transparent')  {
-			backgroundImage = "url('" + $('#txtWallpaper').val() + "')";
-		} else {
-			backgroundImage = null;
-		}
+        code = code.replace(v1RegEx,'($1, $2, $3, $4, lpm, $5)');
+      } else {
+        //console.log("no match with v1");
+      }
 
-		var isCustomTint = $('#isCustomTint').is(':checked');
-		if (!isCustomTint) {
-			$('#txtColor').val(tints[statusBackground].tint);
-		}
+    } else {
+      $("#trLPM").hide();
+      // selected version 1. only replace if v2
+      if (v2RegEx.test(code)) {
+        code = code.replace(v2RegEx,'($1, $2, $3, $4, $6)');
+      } else {
+        //console.log("no match with v2");
+      }
+    }
+    //console.log(code);
+    $('#code').val(code);
 
-		var colors = $('#txtColor').val();
-		var colors = colors.split(',');
 
-		var height = $('#cboHeight option:selected').val();
-		var isCharging = $('#isCharging').is(':checked');
-		var isLow = $('#isLow').is(':checked');
+  }
 
-		var percs=[5,10,20,50,75,100];
+  function settingsChange() {
+    versionChanged();
 
-		var samples = document.getElementById('samples');
+    var code  = $('#code').val();
+    var statusBackground = $('#cboBackground option:selected').val();
+    var statusBackgroundColor = tints[statusBackground].backgroundColor;
 
-		for(var i=0;i<percs.length;i++) {
+    var backgroundImage;
+    if (tints[statusBackground].name == 'Transparent')  {
+      backgroundImage = "url('" + $('#txtWallpaper').val() + "')";
+    } else {
+      backgroundImage = null;
+    }
+    var isLPM = $('#isLPM').is(':checked');
+    var isCustomTint = $('#isCustomTint').is(':checked');
+    if (!isCustomTint) {
+      $('#txtColor').val(tints[statusBackground].tint);
+      if (isLPM) $('#txtColor').val('255,204,0');
+    }
 
-			// create the status bar
-			var div = document.getElementById('div'+percs[i]);
-			//var div = $('#div'+percs[i]);
+    var colors = $('#txtColor').val();
+    var colors = colors.split(',');
 
-			// create the battery image
-			var img = document.getElementById('img'+percs[i]);
+    var height = $('#cboHeight option:selected').val();
+    var isCharging = $('#isCharging').is(':checked');
+    var isLow = $('#isLow').is(':checked');
 
-			if (!div) { // if not existing
 
-				// create
-				div = document.createElement("div");
-				$(div)
-					.attr('id','div'+percs[i])
-					.attr('class','statusBar')
+    var percs=[5,10,20,50,75,100];
 
-				if (i>0) {
-					$('#samples').append($('<br>'))
-				}
+    var samples = document.getElementById('samples');
 
-				$('#samples').append(div)
+    for(var i=0;i<percs.length;i++) {
 
-			}
-			// set status bar styles
-			div.style.height = height+'px';
+      // create the status bar
+      var div = document.getElementById('div'+percs[i]);
+      //var div = $('#div'+percs[i]);
 
-			if (backgroundImage) {
-				div.style.backgroundImage  = backgroundImage;
-			} else {
-				div.style.backgroundColor = statusBackgroundColor;
-				div.style.backgroundImage = null;
-			}
+      // create the battery image
+      var img = document.getElementById('img'+percs[i]);
 
-			if (!img) { //if not exists
+      if (!div) { // if not existing
 
-				$(div).append(
-					$("<span id='errorIcon" + percs[i] + "'>E</span>")
-						.css({
-							"color":"#FFF",
-							"background-color":"#F00",
-							"font-family":"'Helvetica', 'Arial','Tahoma'",
-							"font-size":"7pt",
-							"width":"8pt",
-							"height":"8pt",
-							"display":"block",
-							"text-align":"center",
-							"float":"left"
-						})
-				)
+        // create
+        div = document.createElement("div");
+        $(div)
+          .attr('id','div'+percs[i])
+          .attr('class','statusBar')
 
-				img=document.createElement("img");
-				img.setAttribute('id','img'+percs[i]);
-				img.setAttribute('align','right');
-				img.setAttribute('class','battery');
-				div.appendChild(img);
-				div.appendChild(document.createTextNode(' '));
+        if (i>0) {
+          $('#samples').append($('<br>'))
+        }
 
-			}
-			// set icon
-			try {
-				var matches = code.match(/^(?:\s*\()(\s*\w+\s*(,\s*\w+\s*){4})/)[0].replace(/[\s\(\)]/g, '').split(',');
-				var renderBattery    = new Function(matches[0], matches[1], matches[2], matches[3], matches[4], code);
-				img.setAttribute('src', renderBattery(height, percs[i], isCharging, isLow, colors) );
-				$('#errorIcon' + percs[i]).hide();
-			} catch(err) {
-				console.log(err);
-				$('#errorIcon' + percs[i]).show();
-			}
-		}
-	} //settingsChanged
-	function compile() {
-		$.ajax({
-			type: 'POST',
-			url: 'https://closure-compiler.appspot.com/compile',
-			data: {
-	  			js_code: 'function r' + $('#code').val(),
-	  			compilation_level: 'SIMPLE_OPTIMIZATIONS',
-	  			output_info: 'compiled_code',
-	  			output_format: 'text'
-	  		},
-			success: function(data) {
-				$('#code').val(data.substring(10, data.length - 2).replace(/(\r\n|\n|\r)/gm, ''));
-			}
-		});
-	}
+        $('#samples').append(div)
 
-	</script>
+      }
+      // set status bar styles
+      div.style.height = height+'px';
+
+      if (backgroundImage) {
+        div.style.backgroundImage  = backgroundImage;
+      } else {
+        div.style.backgroundColor = statusBackgroundColor;
+        div.style.backgroundImage = null;
+      }
+
+      if (!img) { //if not exists
+
+        $(div).append(
+          $("<span id='errorIcon" + percs[i] + "'>E</span>")
+            .css({
+              "color":"#FFF",
+              "background-color":"#F00",
+              "font-family":"'Helvetica', 'Arial','Tahoma'",
+              "font-size":"7pt",
+              "width":"8pt",
+              "height":"8pt",
+              "display":"block",
+              "text-align":"center",
+              "float":"left"
+            })
+        )
+
+        img=document.createElement("img");
+        img.setAttribute('id','img'+percs[i]);
+        img.setAttribute('align','right');
+        img.setAttribute('class','battery');
+        div.appendChild(img);
+        div.appendChild(document.createTextNode(' '));
+
+      }
+      var optVersion = $("input:radio[name=optVersion]:checked").val();
+      // set icon
+      try {
+
+
+        if (optVersion==1) {
+          var matches = code.match(/^(?:\s*\()(\s*\w+\s*(,\s*\w+\s*){4})/)[0].replace(/[\s\(\)]/g, '').split(',');
+          var renderBattery = new Function(matches[0], matches[1], matches[2], matches[3], matches[4], code);
+          img.setAttribute('src', renderBattery(height, percs[i], isCharging, isLow, colors) );
+        } else {
+          var matches = code.match(/^(?:\s*\()(\s*\w+\s*(,\s*\w+\s*){5})/)[0].replace(/[\s\(\)]/g, '').split(',');
+          var renderBattery = new Function(matches[0], matches[1], matches[2], matches[3], matches[4], matches[5], code);
+          img.setAttribute('src', renderBattery(height, percs[i], isCharging, isLow, isLPM, colors) );
+        }
+
+        $('#errorIcon' + percs[i]).hide();
+      } catch(err) {
+        console.log(err);
+        $('#errorIcon' + percs[i]).show();
+      }
+    }
+  } //settingsChanged
+  function compile() {
+    $.ajax({
+      type: 'POST',
+      url: 'https://closure-compiler.appspot.com/compile',
+      data: {
+          js_code: 'function r' + $('#code').val(),
+          compilation_level: 'SIMPLE_OPTIMIZATIONS',
+          output_info: 'compiled_code',
+          output_format: 'text'
+        },
+      success: function(data) {
+        //$('#code').val(data.substring(10, data.length - 2).replace(/(\r\n|\n|\r\n)/gm, ''));
+        var newCode = data;
+        var newCode = data.replace(/(function\s\w)(\()([\w,]+)(\))(\{)([\w\W]*)/,'$2$3$4\r\n$5$6');
+        $('#code').val(newCode);
+
+        new Clipboard('#code', {
+            text: function(trigger) {
+                return ('function r'+newCode);
+            }
+        });
+
+        settingsChange();
+      }
+    });
+  }
+
+  function download() {
+    var filename = $('#sampleChooser option:selected').text();
+    var code = 'function r'+$('#code').val();
+    var e = document.createElement('a');
+    e.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
+    e.setAttribute('download', filename);
+    e.style.display = 'none';
+    document.body.appendChild(e);
+    e.click();
+    document.body.removeChild(e);
+  }
+
+  $('document')
+
+  </script>
 </head>
 <body>
 <h2>Lithium Theme Editor</h2> by <a href="https://twitter.com/supermamon/">@supermamon</a>
 <br>
 <table width="100%" border="0">
-	<tr>
-		<td>
-			<b>Sample Code:</b> <select id="sampleChooser" onchange="themeSelect()"></select>
-		</td>
-		<td>
-			<b>Preview:</b>
-		</td>
-	</tr>
-	<tr>
-		<td><hr></td>
-		<td><hr></td>
-	</tr>
-	<tr>
-		<td valign="top" width="50%">
-			<div id="divCode">function renderBattery</div>
-			<textarea id="code" rows="40" cols="100" onkeyup="settingsChange()"></textarea>
-		</td>
-		<td valign="top" align="left" width="50%">
-			<table border="0" align="center">
-				<tr>
-					<td valign="middle">Lithium Version</td>
-					<td>
-						<input id="optVersion1" name="optVersion" type="radio" value="1" onchange="versionChanged();" checked>v1</input>
-						<input id="optVersion2" name="optVersion" type="radio" value="2" onchange="versionChanged();">v2</input>
-					</td>
-				</tr>
-				<tr>
-					<td valign="middle">Status Background</td>
-					<td>
-						<select id="cboBackground" onchange="settingsChange();" />
-					</td>
-				</tr>
-				<tr>
-					<td valign="middle">Status Height</td>
-					<td><select id="cboHeight" onchange="settingsChange()">
-						<option value="20">20
-						<option value="24">24
-						<option value="40" selected>40
-						<option value="48">48
-						<option value="60">60
-						<option value="72">72
-					</select>
-					<br>
-					<sup>This is the height of the status bar</sup>
-					</td>
-				</tr>
-				<tr>
-					<td>Battery Charging</td>
-					<td>
-						<input id="isCharging" type="checkBox" onclick="settingsChange()">
-						<br>
-						<sup>Tick this to see how it looks like when charging</sup>
-					</td>
-				</tr>
-				<tr>
-					<td>Battery Low</td>
-					<td>
-						<input id="isLow" type="checkBox" onclick="settingsChange()">
+  <tr>
+    <td>
+      <b>Sample Code:</b> <select id="sampleChooser" onchange="themeSelect()"></select>
+    </td>
+    <td>
+      <b>Preview:</b>
+    </td>
+  </tr>
+  <tr>
+    <td><hr></td>
+    <td><hr></td>
+  </tr>
+  <tr>
+    <td valign="top" width="50%">
+      <div id="divCode">function renderBattery</div>
+      <textarea id="code" rows="40" cols="100" onkeyup="settingsChange()"></textarea>
+    </td>
+    <td valign="top" align="left" width="50%">
+      <table border="0" align="center">
+        <tr>
+          <td valign="middle">Lithium Version</td>
+          <td>
+            <input id="optVersion1" name="optVersion" type="radio" value="1" onchange="settingsChange();" checked>Lithium</input>
+            <input id="optVersion2" name="optVersion" type="radio" value="2" onchange="settingsChange();">Lithium Ion</input>
+          </td>
+        </tr>
+        <tr>
+          <td valign="middle">Status Background</td>
+          <td>
+            <select id="cboBackground" onchange="settingsChange();" />
+          </td>
+        </tr>
+        <tr>
+          <td valign="middle">Status Height</td>
+          <td><select id="cboHeight" onchange="settingsChange()">
+            <option value="20">20
+            <option value="24">24
+            <option value="40" selected>40
+            <option value="48">48
+            <option value="60">60
+            <option value="72">72
+          </select>
+          <br>
+          <sup>This is the height of the status bar</sup>
+          </td>
+        </tr>
+        <tr>
+          <td>Battery Charging</td>
+          <td>
+            <input id="isCharging" type="checkBox" onclick="settingsChange()">
+            <br>
+            <sup>Tick this to see how it looks like when charging</sup>
+          </td>
+        </tr>
+        <tr>
+          <td>Battery Low</td>
+          <td>
+            <input id="isLow" type="checkBox" onclick="settingsChange()">
 
-						<br>
-						<sup>Tick this to see how it looks like when battery is low</sup>
-					<td>
-				</tr>
-				<tr>
-					<td>System Tint</td>
-					<td><input id="txtColor" type="text" value="0,0,0" onchange="settingsChange()">
-					<input id="isCustomTint" type="checkBox" onclick="settingsChange()">Use Custom
-					<br>
-					<sup>Separate the values comma. This is the system tint. Some tweaks like Eclipse can change this.</sup>
-				</tr>
-				<tr>
-					<td>Wallpaper</td>
-					<td><input id="txtWallpaper" type="text" size="50" onchange="settingsChange()" value="images/os_x_mountain_lion.png">
-					<br>
-					<sup>Only applies when Transparent background is selected. You can specify the full URL here.
-					<br>
-					Doesn't detect light or dark wallpapers. Assumes dark. Set Custom System tint (0,0,0) to simulate light wallpaper.
-					</sup>
-				</tr>
-				<tr>
-					<td>Closure Compiler</td>
-					<td><input id="closureCompiler" type="button" onclick="compile()" value="Compile">
-					<br>
-					<sup>Run code through Google's Closure Compiler. Do this before packaging your theme. <span style="font-weight:bold">This will overwrite any code you have entered.</span>
-					<br>
-					<span id="compilerError"></span>
-					</sup>
-				<tr>
-					<td valign="top" colspan="2">How it looks like?</td>
-				</tr>
-				<tr>
-					<td id="samples" colspan="2"></td>
-				</tr>
-			</table>
-			<hr>
-			<table border="0" width="90%" align="center">
-			<tr>
-				<td valign="top" width="50%">
-					<p><b>Need help?</b>
-					<div id="help">
-						<ul>
-							<li><a href="http://aarzee.me/lithium/tutorial.html">Lithium Tutorial</a></li>
-							<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial">Canvas Tutorial by MDN</a></li>
-							<li><a href="http://diveintohtml5.info/canvas.html">Canvas - Dive Into HML5</a></li>
-							<li><a href="http://www.html5canvastutorials.com/tutorials/html5-canvas-element/">HTML Canvas Tutorials</a></li>
-							<li><a href="http://www.w3schools.com/canvas/default.asp">HTML Canvas by W3Schools</a></li>
-						</ul>
-						</p>
-					</div>
-				</td>
-				<td valign="top" width="50%">
-					<b>Links</b>
-					<div id="help">
-						<ul>
-							<li><a href="changelog.txt">Changelog</a></li>
-							<li><a href="faq.txt">FAQ</a></li>
-						</ul>
-					</div>
-				</td>
-			</tr>
-			</table>
-		</td>
-	</tr>
+            <br>
+            <sup>Tick this to see how it looks like when battery is low</sup>
+          <td>
+        </tr>
+        <tr id="trLPM" style="display:none">
+          <td>Low Power Mode</td>
+          <td>
+            <input id="isLPM" name="isLPM" type="checkBox" onclick="settingsChange()">
+
+            <br>
+            <sup>Tick this to see how it looks like when it is in low power mode</sup>
+          <td>
+        </tr>
+        <tr>
+          <td>System Tint</td>
+          <td><input id="txtColor" type="text" value="0,0,0" onchange="settingsChange()">
+          <input id="isCustomTint" type="checkBox" onclick="settingsChange()">Use Custom
+          <br>
+          <sup>Separate the values comma. This is the system tint. Some tweaks like Eclipse can change this.</sup>
+        </tr>
+        <tr>
+          <td>Wallpaper</td>
+          <td><input id="txtWallpaper" type="text" size="50" onchange="settingsChange()" value="images/osx-ml-cropped.png">
+          <br>
+          <sup>Only applies when Transparent background is selected. You can specify the full URL here.
+          <br>
+          Doesn't detect light or dark wallpapers. Assumes dark. Set Custom System tint (0,0,0) to simulate light wallpaper.
+          </sup>
+        </tr>
+        <tr>
+          <td valign="top">Closure Compiler</td>
+          <td valign="top"><input id="closureCompiler" type="button" onclick="compile()" value="Compile"><input id="download" type="button" onclick="download()" value="Download">
+          <br>
+          <sup>Run code through Google's Closure Compiler. Do this before packaging your theme. <span style="font-weight:bold">This will overwrite any code you have entered.</span>
+          <br>
+          <span id="compilerError"></span>
+          </sup>
+        <tr>
+          <td valign="top" colspan="2">How it looks like?</td>
+        </tr>
+        <tr>
+          <td id="samples" colspan="2"></td>
+        </tr>
+      </table>
+      <hr>
+      <table border="0" width="90%" align="center">
+      <tr>
+        <td valign="top" width="50%">
+          <p><b>Need help?</b>
+          <div id="help">
+            <ul>
+              <li><a href="http://aarzee.me/lithium/tutorial.html">Lithium Tutorial</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial">Canvas Tutorial by MDN</a></li>
+              <li><a href="http://diveintohtml5.info/canvas.html">Canvas - Dive Into HML5</a></li>
+              <li><a href="http://www.html5canvastutorials.com/tutorials/html5-canvas-element/">HTML Canvas Tutorials</a></li>
+              <li><a href="http://www.w3schools.com/canvas/default.asp">HTML Canvas by W3Schools</a></li>
+            </ul>
+            </p>
+          </div>
+        </td>
+        <td valign="top" width="50%">
+          <b>Links</b>
+          <div id="help">
+            <ul>
+              <li><a href="changelog.txt">Changelog</a></li>
+              <li><a href="faq.txt">FAQ</a></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+      </table>
+    </td>
+  </tr>
 </table>
 <!-- Start of SimpleHitCounter Code -->
 <div align="center">

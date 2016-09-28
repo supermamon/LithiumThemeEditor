@@ -12,10 +12,11 @@ v2.0.0 - Theme Builder, point and click, download, better design.
 
 
 ChangeLog
+v0.6.7 : Compatibility with Lithium Ion. Fixes Compile. Added Download.
 v0.6.6 : Support for Lithium 2. Minor bugfixes.
 v0.6.5 : aarzee added 24px height and compile button.
          Separated from supermamon.github.io site.
-v0.6.4 : Support loading scripts as .js files instead of xml. 
+v0.6.4 : Support loading scripts as .js files instead of xml.
          Temporarily remove 'x' parameter support for xss-security.
 v0.6.3 : Syntax checking. Show a small red 'E' on the preview.
 v0.6.2 : Load own xml file by passing the url via 'x' querystring
