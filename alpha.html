@@ -1,182 +1,334 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Lithium Theme Editor</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <title>Lithium Theme Editor</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.12/dist/clipboard.min.js"></script>
 <style>
 #divCode {
-	/*function header*/
-	font-family : 'Consolas','Courier New','Courier','monospace';
-	font-size: 9pt;
-	border: 1px solid Silver;
-	border-bottom: 0px;
-	background-color: #ddd;
-	width = '100%';
+  /*function header*/
+  font-family : 'Consolas','Courier New','Courier','monospace';
+  font-size: 9pt;
+  border: 1px solid Silver;
+  border-bottom: 0px;
+  background-color: '#ddd';
+  width: '100%';
 }
 #code {
-	/*text area*/
-	font-family : 'Consolas','Courier New','Courier','monospace';
-	font-size: 9pt;
-	border: 1px solid Silver;
-	border-top: 0px;
-	height: '100%'
+  /*text area*/
+  font-family : 'Consolas','Courier New','Courier','monospace';
+  font-size: 9pt;
+  border: 1px solid Silver;
+  border-top: 0px;
+  height: '100%';
+
 }
+#code::first-line {
+  text-indent: 50px;
+}
+
 </style>
 
-	<script>
+<script>
+  var themes = [];
+  themes[themes.length] = 'Habesha.js';
+  themes[themes.length] = 'LBI.js';
+  themes[themes.length] = 'Droid.js';
+  themes[themes.length] = 'Hearts.js';
+  themes[themes.length] = 'LN-Simple.js';
+  themes[themes.length] = 'LN-Dots.js';
+  themes[themes.length] = 'LN-Batthead.js';
+  themes[themes.length] = 'LN-Speedometer.js';
+  themes[themes.length] = 'LN-BlocksTemplate.js';
+  //themes[themes.length] = 'LN-Customizeable.xml';
+  themes[themes.length] = 'Empty.js';
 
-	var settings = [];
-	settings['height']=20;
-	settings['background']='White';
+  var tints = [];
+  tints['White']        = {name:'White'      ,backgroundColor:'#FFFFFF',tint:'0,0,0'};
+  tints['Black']        = {name:'Black'      ,backgroundColor:'#000000',tint:'255,255,255'};
+  tints['Gray']         = {name:'Gray'       ,backgroundColor:'#888888',tint:'0,0,0'};
+  tints['Facebook']     = {name:'Facebook'   ,backgroundColor:'#3b5998',tint:'255,255,255'};
+  tints['LinkedIn']     = {name:'LinkedIn'   ,backgroundColor:'#007bb6',tint:'255,255,255'};
+  tints['Viber']        = {name:'Viber'      ,backgroundColor:'#783cbd',tint:'255,255,255'};
+  tints['Transparent']  = {name:'Transparent',backgroundColor:'#000000',tint:'255,255,255'};
 
-	function applySetting(pref,val){
-		settings[pref]=val;
-	}
-	function event_settings_changed(){
-		alert('changed');
+  var heights = [20,24,40,48,60,72];
 
-	}
+  var settings = [];
+  settings['lithium']='Lithium Ion';
+  settings['height']=40;
+  settings['tint']='White';
+  settings['theme']='Habesha.js';
+
+  function applySetting(pref,val){
+    console.log('Set '+pref+'='+val);
+
+    settings[pref]=val;
+
+    if (pref=='theme') event_theme_changed();
+    //if (pref=='lithium') event_lithium_version_changed();
+    if (pref=='tint') {
+      $('#batteryTint').val( tints[val].tint );
+    }
+    event_settings_changed();
+  }
+
+  function event_theme_changed() {
+    var themeFile = 'themes/'+settings['theme'];
+    $.ajax({
+        type: "GET",
+        async: false,
+        url: themeFile,
+        dataType: "text",
+        success: function(textData) {
+          $('#code').val(textData);
+        }
+    }); //ajax
+  }
+
+  function event_settings_changed(){
+
+    if (settings['lithium']=='Lithium Ion') {
+      $('#divCode').html('function renderBattery(height, percentage, charging, low, lpm, color)');
+    } else {
+      $('#divCode').html('function renderBattery(height, percentage, charging, low, color)');
+    }
+
+    if (settings['tint']=='Transparent') {
+      var wpURL = $('#wallpaperURL').attr('placeholder');
+      if ($('#wallpaperURL').val()) {
+        wpURL = $('#wallpaperURL').val();
+      }
+      $('#iPhoneScreen').css('background-image','url('+wpURL+')');
+    } else {
+      $('#iPhoneScreen').css('background-image','none');
+    }
+    $('#iPhoneScreen').css('background-color',tints[settings['tint']].backgroundColor);
+
+    $('#iPhoneStatusbar').css('height',settings['height']+'px');
+
+  }
+
+  function event_code_changed(){
+
+  }
+
+  $(document).ready(function(){
+    /* Load Themes */
+    for (var i=0;i<themes.length;i++) {
+      var n = $("<a></a>")
+        .attr("href",'javascript:void(0)')
+        .click(function(){ applySetting('theme',$(this).text()); })
+        .text(themes[i])
+      ;
+      var l = $("<li></li>").append(n);
+      $('#ulThemes').append(l);
+    }
+
+    /* Load Tints */
+    for (thisTint in tints) {
+      var n = $("<a></a>")
+        .attr("href",'javascript:void(0)')
+        .click(function(){ applySetting('tint',$(this).text()); })
+        .text(tints[thisTint].name)
+      ;
+      var l = $("<li></li>").append(n);
+      $('#ulTints').append(l);
+
+      console.log('Added tint ' + tints[thisTint].name);
+    }
+
+    for (var i=0;i<heights.length;i++) {
+      console.log('Add height: ' + heights[i]);
+      var n = $("<a></a>")
+        .attr("href",'javascript:void(0)')
+        .click(function(){ applySetting('height',$(this).text()); })
+        .text(heights[i])
+      ;
+      var l = $("<li></li>").append(n);
+      $('#ulHeights').append(l);
+    }
 
 
 
-	</script>
+    new Clipboard('#copyButton', {
+        text: function(trigger) {
+          return ($('#divCode').html()+'\r\n'+$('#code').val());
+        }
+    });
+
+    $('#downloadButton').click(function(){
+      var filename = settings['theme'];
+      var code = $('#divCode').html()+'\r\n'+$('#code').val();
+      var e = document.createElement('a');
+      e.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
+      e.setAttribute('download', filename);
+      e.style.display = 'none';
+      document.body.appendChild(e);
+      e.click();
+      document.body.removeChild(e);
+    });
+
+    $('#compileButton').click(function(){
+      var code = $('#divCode').html()+'\r\n'+$('#code').val();
+
+      $.ajax({
+        type: 'POST',
+        url: 'https://closure-compiler.appspot.com/compile',
+        data: {
+            js_code: code,
+            compilation_level: 'SIMPLE_OPTIMIZATIONS',
+            output_info: 'compiled_code',
+            output_format: 'text'
+          },
+        success: function(data) {
+          //$('#code').val(data.substring(10, data.length - 2).replace(/(\r\n|\n|\r\n)/gm, ''));
+          var newCode = data;
+          var newCode = data.replace(/(function\s\w*)(\()([\w,]+)(\))(\{)([\w\W]*)/,'$5$6');
+          $('#code').val(newCode);
+        }
+      });
+    });
+
+
+    event_settings_changed();
+
+  }); //ready
+
+</script>
 
 </head>
 <body>
 
 <div class="container-fliud">
 
-	<div class="row">
-		<div class="col-md-12 text-center">
-			<h3>Lithium Theme Editor <small>by @supermamon</small></h3>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-5 text-right">
-			<!-- Device Button -->
-			<div class="btn-group">
-				<button type="button" class="btn btn-sm btn-default" id="cboDevice">Device</button>
-				<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<span class="caret"></span>
-					<span class="sr-only">Toggle Dropdown</span>
-				</button>
-				<ul class="dropdown-menu" aria-labelledby="cboDevice">
-					<li class="dropdown-header">Device</li>
-					<li><a href="#">iPhone 6+</a></li>
-					<li><a href="#">iPhone 6</a></li>
-				</ul>
-			</div>
-			<!-- Theme Button -->
-			<div class="btn-group">
-				<button type="button" class="btn btn-sm btn-default" id="cboTheme">Theme</button>
-				<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<span class="caret"></span>
-					<span class="sr-only">Toggle Dropdown</span>
-				</button>
-				<ul class="dropdown-menu" aria-labelledby="cboTheme">
-					<li class="dropdown-header">Theme</li>
-					<li><a href="#">Habesha.js</a></li>
-					<li><a href="#">Dot.js</a></li>
-				</ul>
-			</div>
-			<!-- Background Button -->
-			<div class="btn-group">
-			  <button type="button" class="btn btn-sm btn-default" id="cboBackground">Background</button>
-			  <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			    <span class="caret"></span>
-			    <span class="sr-only">Toggle Dropdown</span>
-			  </button>
-			  <ul class="dropdown-menu" aria-labelledby="cboBackground">
-					<li class="dropdown-header">Background</li>
-			    <li><a href="#">White</a></li>
-			    <li><a href="#">Black</a></li>
-			    <li><a href="#">Silver</a></li>
-			  </ul>
-			</div>
-			<!-- Height Button -->
-			<div class="btn-group">
-			  <button type="button" class="btn btn-sm btn-default" id="cboHeight">Height</button>
-			  <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			    <span class="caret"></span>
-			    <span class="sr-only">Toggle Dropdown</span>
-			  </button>
-			  <ul class="dropdown-menu" aria-labelledby="cboHeight">
-					<li class="dropdown-header">Height</li>
-			    <li><a href="#">20</a></li>
-			    <li><a href="#">24</a></li>
-			    <li><a href="#">40</a></li>
-			  </ul>
-			</div>
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h3>Lithium Theme Editor <small>by @supermamon</small></h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5 text-right">
 
-			<div class="btn-group" data-toggle="buttons">
-					<!-- Charging Button -->
-			    <label class="btn btn-sm btn-default glyphicon glyphicon-flash" title="Charging">
-			    	<input type="checkbox">
-			  	</label>
-					<!-- Battery Low Button -->
-					<label class="btn btn-sm btn-default glyphicon glyphicon-exclamation-sign" title="Battery Low">
-			    	<input type="checkbox">
-			  	</label>
-			</div>
+      <!-- Device Button -->
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm btn-default" id="cboDevice" title="Lithium Version">Lithium Ion</button>
+        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="cboDevice">
+          <li class="dropdown-header">Lithium Version</li>
+          <li><a href="javascript:void(0)" onclick="applySetting('lithium','Lithium Ion')">Lithium Ion</a></li>
+          <li><a href="javascript:void(0)" onclick="applySetting('lithium','Lithium')">Lithium</a></li>
+        </ul>
+      </div>
+      <!-- Theme Button -->
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm btn-default" id="cboTheme">Theme</button>
+        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="cboTheme" id="ulThemes">
+          <li class="dropdown-header">Theme</li>
+        </ul>
+      </div>
+      <!-- Background Button -->
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm btn-default" id="cboBackground">Background</button>
+        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="cboBackground" id="ulTints">
+          <li class="dropdown-header">Background</li>
+        </ul>
+      </div>
+      <!-- Height Button -->
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm btn-default" id="cboHeight">Height</button>
+        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="cboHeight" id="ulHeights">
+          <li class="dropdown-header">Height</li>
+        </ul>
+      </div>
+
+      <div class="btn-group" data-toggle="buttons">
+          <!-- Charging Button -->
+          <label class="btn btn-sm btn-default glyphicon glyphicon-flash" title="Charging">
+            <input type="checkbox">
+          </label>
+          <!-- Battery Low Button -->
+          <label class="btn btn-sm btn-default glyphicon glyphicon-exclamation-sign" title="Battery Low">
+            <input type="checkbox">
+          </label>
+
+          <label class="btn btn-sm btn-default glyphicon glyphicon-minus" title="Low Power Mode">
+            <input type="checkbox">
+          </label>
 
 
-		</div> <!-- COL 1 -->
-		<div class="col-md-2">
-			<div class="input-group">
-				<span class="input-group-addon" id="CustomTintLabel">Custom Tint</span>
-	      <span class="input-group-addon">
-	        <input type="checkbox" aria-describedby="CustomTintLabel">
-	      </span>
-	      <input type="text" class="form-control" placeholder="0,0,0" aria-label="...">
-	    </div><!-- /input-group -->
-		</div> <!-- COL 2 -->
-		<div class="col-md-4">
-			<div class="input-group">
-			  <span class="input-group-addon" id="basic-addon1">Wallpaper</span>
-			  <input type="text" class="form-control" placeholder="images/os_x_mountain_lion.png" aria-describedby="basic-addon1">
-			</div>
-		</div> <!-- COL 3 -->
-		<div class="col-md-1">
-		</div><!-- COL 4 -->
-	</div> <!-- ROW -->
+      </div>
+
+
+    </div> <!-- COL 1 -->
+    <div class="col-md-2">
+      <div class="input-group input-group-sm">
+        <span class="input-group-addon" id="CustomTintLabel">Custom Tint</span>
+        <span class="input-group-addon">
+          <input type="checkbox" aria-describedby="CustomTintLabel">
+        </span>
+        <input type="text" class="form-control" placeholder="255,255,255" aria-label="..." id="batteryTint">
+      </div><!-- /input-group -->
+    </div> <!-- COL 2 -->
+    <div class="col-md-3">
+      <div class="input-group input-group-sm">
+        <span class="input-group-addon" id="wallpaperLabel">Wallpaper</span>
+        <input id="wallpaperURL" type="text" class="form-control" placeholder="images/os_x_mountain_lion.png" aria-describedby="wallpaperLabel">
+      </div>
+    </div> <!-- COL 3 -->
+    <div class="col-md-2">
+      <button id="copyButton" class="btn btn-sm btn-default glyphicon glyphicon-copy" title="Copy the current code"></button>
+      <button id="compileButton" class="btn btn-sm btn-default glyphicon glyphicon-compressed" title="Compile"></button>
+      <button id="downloadButton" class="btn btn-sm btn-default glyphicon glyphicon-download" title="Download the current code"></button>
+    </div><!-- COL 4 -->
+  </div> <!-- ROW -->
 
 <hr />
 <div class="container-fliud">
-	<div class="row">
-		<div class="col-md-6" style="margin-left:1px;">
-			<div class="col-md-12" id="divCode">function renderBattery</div>
-			<textarea class="col-md-12 form-control" id="code" rows="33" cols="80"></textarea>
-			</div>
-		<div class="col-md-5">
-			<div style="background:url(images/iPhone6.png);height:300px;width:702px;">
-				<div style="border:1px solid green; position:absolute; top:174px; left:65px; width:603px; height:24px;">
+  <div class="row">
+    <div class="col-md-6" style="margin-left:1px;">
+      <div class="col-md-12" id="divCode">function renderBattery(height, percentage, charging, low, color)</div>
+      <textarea class="col-md-12 form-control" id="code" rows="33" cols="80"></textarea>
+      </div>
+    <div class="col-md-5">
+      <div style="background:url(images/iPhone6.png);height:300px;width:702px;">
+        <div id="iPhoneScreen" style="position:absolute; top:174px; left:65px; width:603px; height:126px; background-color:White">
+          <div id="iPhoneStatusbar" style="border:1px solid green; position:absolute; top:0; left:0px; width:603px; height:40px;">
+          </div>
+        </div>
 
-				</div>
+      </div>
+    </div>
 
-			</div>
-		</div>
-
-	</div>
+  </div>
 </div>
 <script>
 $(function(){
 
     $(".dropdown-menu").on('click', 'li a', function(){
-			var button = $(this).parent().parent().attr('aria-labelledby');
-			$('#'+button).text($(this).text());
-			$('#'+button).val($(this).text());
+      var button = $(this).parent().parent().attr('aria-labelledby');
+      $('#'+button).text($(this).text());
+      $('#'+button).val($(this).text());
    });
 
 });
